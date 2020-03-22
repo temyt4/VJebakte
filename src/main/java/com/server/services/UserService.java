@@ -1,0 +1,54 @@
+package com.server.services;
+
+import com.server.domain.User;
+import com.server.domain.UserMessage;
+import com.server.repos.UserMessageRepo;
+import com.server.repos.UserRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import javax.validation.constraints.NotNull;
+
+@Service("userService")
+public class UserService implements UserDetailsService {
+
+    @Autowired
+    private UserRepo userRepo;
+
+    @Autowired
+    private UserMessageRepo userMessageRepo;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        User user = userRepo.findByUsername(s);
+        if(user == null){
+            throw new UsernameNotFoundException("not found user");
+        }
+        return user;
+    }
+
+    public User findByUserName(String username){
+        return userRepo.findByUsername(username);
+    }
+
+    public void addNewMessage(User user, UserMessage userMessage){
+        UserMessage save = userMessageRepo.save(userMessage);
+        user.getMessages().add(save);
+        userRepo.save(user);
+    }
+
+    public void setPassword(User user, String password){
+        user.setPassword(passwordEncoder.encode(password));
+    }
+
+    public void save(@NotNull User user){
+        userRepo.save(user);
+    }
+}
