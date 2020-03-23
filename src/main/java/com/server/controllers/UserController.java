@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
@@ -40,7 +41,8 @@ public class UserController {
         UserDto user = userService.findUserDtoByUsername(username);
         model.addAttribute("isCurrentUserPage", currentUser.equals(user));
         model.addAttribute("user", user);
-        Set<UserMessage> messages = user.getMessages();
+        ArrayList<UserMessage> messages = new ArrayList<>(user.getMessages());
+        messages.sort((o1, o2) -> o2.getCreatedDate().compareTo(o1.getCreatedDate()));
         model.addAttribute("messages", messages);
         if (!currentUser.equals(user)) {
             model.addAttribute("isFriend", currentUser.getFriends().contains(userService.findByUserName(username)));

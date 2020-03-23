@@ -8,7 +8,9 @@ import java.util.Date;
 
 @Entity
 @Table(name = "commessage")
-public class CommMessage implements Serializable {
+public class CommMessage implements Serializable, Comparable<CommMessage> {
+
+    private static final long serialVersionUID = 7565783440143452812l;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,5 +66,10 @@ public class CommMessage implements Serializable {
 
     public void setAuthorName(String authorName) {
         this.authorName = authorName;
+    }
+
+    @Override
+    public int compareTo(CommMessage o) {
+        return getCreatedDate().compareTo(o.getCreatedDate());
     }
 }

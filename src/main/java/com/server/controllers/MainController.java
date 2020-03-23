@@ -12,7 +12,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -63,25 +62,6 @@ public class MainController {
         return "friends";
     }
 
-    @GetMapping("/communities")
-    public String communities(@AuthenticationPrincipal User current, Model model) {
-        User user = userService.findById(current.getId());
-        Set<Community> communities = user.getCommunities();
-        model.addAttribute("communities", communities);
-        model.addAttribute("currentUser", user);
-        return "communitylist";
-    }
-
-
-    @GetMapping("/communities/{name}")
-    public String comm(@PathVariable String name, Model umodel, @AuthenticationPrincipal User current) {
-        User user = userService.findById(current.getId());
-        Community community = communityService.findByName(name);
-        Set<CommMessage> messages = community.getMessages();
-        umodel.addAttribute("messages", messages);
-        umodel.addAttribute("currentUser", user);
-        return "community";
-    }
 
 
 }

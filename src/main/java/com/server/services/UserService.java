@@ -1,5 +1,6 @@
 package com.server.services;
 
+import com.server.domain.Community;
 import com.server.domain.User;
 import com.server.domain.UserMessage;
 import com.server.domain.dto.UserDto;
@@ -88,4 +89,5 @@ public class UserService implements UserDetailsService {
     public void saveMessage(UserMessage userMessage) {
         userMessageRepo.save(userMessage);
     }
+
 }
