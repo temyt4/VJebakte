@@ -9,7 +9,7 @@
                         <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
                             <ol class="list-unstyled">
                                 <li>
-                                    <a href="/users/${name}">Моя Страница</a>
+                                    <a href="/users/${currentUser.getUsername()}">Моя Страница</a>
                                 </li>
                                 <li>
                                     <a href="/news">Новости</a>
