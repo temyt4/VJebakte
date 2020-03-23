@@ -1,8 +1,6 @@
 package com.server.domain;
 
-import org.hibernate.envers.Audited;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;

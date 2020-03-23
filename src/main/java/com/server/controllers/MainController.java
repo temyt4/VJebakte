@@ -4,7 +4,6 @@ import com.server.domain.CommMessage;
 import com.server.domain.Community;
 import com.server.domain.User;
 import com.server.domain.UserMessage;
-import com.server.domain.dto.UserDto;
 import com.server.services.CommunityService;
 import com.server.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,18 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 @Controller
 public class MainController {
@@ -84,12 +74,12 @@ public class MainController {
 
 
     @GetMapping("/communities/{name}")
-    public String comm(@PathVariable String name, Model model, @AuthenticationPrincipal User current) {
+    public String comm(@PathVariable String name, Model umodel, @AuthenticationPrincipal User current) {
         User user = userService.findById(current.getId());
         Community community = communityService.findByName(name);
         Set<CommMessage> messages = community.getMessages();
-        model.addAttribute("messages", messages);
-        model.addAttribute("currentUser", user);
+        umodel.addAttribute("messages", messages);
+        umodel.addAttribute("currentUser", user);
         return "community";
     }
 
