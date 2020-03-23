@@ -47,15 +47,16 @@ public class MainController {
     }
 
     @GetMapping("/news")
-    public String main(@AuthenticationPrincipal User user, Model model){
+    public String main(@AuthenticationPrincipal User current, Model model) {
+        User user = userService.findByUserName(current.getUsername());
         Set<UserMessage> userMessages = new HashSet<>();
         Set<User> friends = user.getFriends();
-        for(User u: friends){
+        for (User u : friends) {
             userMessages.addAll(u.getMessages());
         }
         Set<CommMessage> commMessages = new HashSet<>();
         Set<Community> communities = user.getCommunities();
-        for(Community community:communities){
+        for (Community community : communities) {
             commMessages.addAll(community.getMessages());
         }
         model.addAttribute("commMessage", commMessages);
@@ -64,7 +65,8 @@ public class MainController {
     }
 
     @GetMapping("/friends")
-    public String friends(@AuthenticationPrincipal User user, Model model){
+    public String friends(@AuthenticationPrincipal User current, Model model) {
+        User user = userService.findByUserName(current.getUsername());
         Set<User> friends = user.getFriends();
         model.addAttribute("friends", friends);
 
@@ -72,15 +74,16 @@ public class MainController {
     }
 
     @GetMapping("/communities")
-    public String communities(@AuthenticationPrincipal User user, Model model){
+    public String communities(@AuthenticationPrincipal User current, Model model) {
+        User user = userService.findByUserName(current.getUsername());
         Set<Community> communities = user.getCommunities();
         model.addAttribute("communities", communities);
         return "communitylist";
     }
 
     @GetMapping("/users/{username}")
-    public String userPage(@PathVariable String username, Model model, @AuthenticationPrincipal User currentUser) {
-        userService.flush();
+    public String userPage(@PathVariable String username, Model model, @AuthenticationPrincipal User current) {
+        User currentUser = userService.findByUserName(current.getUsername());
         UserDto user = userService.findUserDtoByUsername(username);
         model.addAttribute("isCurrentUserPage", currentUser.equals(userService.findByUserName(username)));
         model.addAttribute("user", user);
@@ -93,7 +96,7 @@ public class MainController {
     }
 
     @GetMapping("/communities/{name}")
-    public String comm(@PathVariable String name, Model model, @AuthenticationPrincipal User currentUser){
+    public String comm(@PathVariable String name, Model model) {
         Community community = communityService.findByName(name);
         Set<CommMessage> messages = community.getMessages();
         model.addAttribute("messages", messages);
@@ -101,8 +104,7 @@ public class MainController {
     }
 
     @PostMapping("/users/{name}")
-    public String addMessage(@PathVariable String name, Model model, @AuthenticationPrincipal User currentUser, @RequestParam String text){
-        userService.flush();
+    public String addMessage(@PathVariable String name, @RequestParam String text) {
         User user = userService.findByUserName(name);
         UserMessage userMessage = new UserMessage();
         LocalDateTime localDateTime = LocalDateTime.now();
@@ -116,7 +118,6 @@ public class MainController {
 
     @GetMapping("/users/{name}/edit")
     public String edit(@PathVariable String name,
-                       @AuthenticationPrincipal User currentUser,
                        Model model){
         User user = userService.findByUserName(name);
         model.addAttribute("user", user);
@@ -125,7 +126,6 @@ public class MainController {
 
     @PostMapping("/users/{name}/edit")
     public String userEdit(@PathVariable String name,
-                           @AuthenticationPrincipal User currentUser,
                            Model model,
                            @RequestParam String username,
                            @RequestParam String password,
@@ -173,7 +173,8 @@ public class MainController {
     }
 
     @PostMapping("/users/{username}/{action}")
-    public String addOrDelete(@PathVariable String username, @PathVariable String action, @AuthenticationPrincipal User currentUser) {
+    public String addOrDelete(@PathVariable String username, @PathVariable String action, @AuthenticationPrincipal User current) {
+        User currentUser = userService.findByUserName(current.getUsername());
         User user = userService.findByUserName(username);
         if (action.equals("add")) {
             userService.addFriend(user, currentUser);
