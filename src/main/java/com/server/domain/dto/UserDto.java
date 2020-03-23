@@ -5,9 +5,8 @@ import com.server.domain.Role;
 import com.server.domain.User;
 import com.server.domain.UserMessage;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 
 public class UserDto {
@@ -117,5 +116,18 @@ public class UserDto {
 
     public void setMessages(Set<UserMessage> messages) {
         this.messages = messages;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserDto userDto = (UserDto) o;
+        return Objects.equals(id, userDto.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

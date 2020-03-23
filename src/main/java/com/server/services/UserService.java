@@ -29,17 +29,21 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user = userRepo.findByUsername(s);
-        if(user == null){
+        if (user == null) {
             throw new UsernameNotFoundException("not found user");
         }
         return user;
     }
 
-    public User findByUserName(String username){
+    public User findByUserName(String username) {
         return userRepo.findByUsername(username);
     }
 
-    public void addNewMessage(User user, UserMessage userMessage){
+    public User findById(Long id) {
+        return userRepo.findById(id).get();
+    }
+
+    public void addNewMessage(User user, UserMessage userMessage) {
         UserMessage save = userMessageRepo.save(userMessage);
         user.getMessages().add(save);
         userRepo.save(user);
@@ -75,5 +79,13 @@ public class UserService implements UserDetailsService {
 
     public UserDto findUserDtoByUsername(String username) {
         return userRepo.findDtoByUsername(username);
+    }
+
+    public UserDto findUserDtoById(Long id) {
+        return userRepo.findDtoById(id);
+    }
+
+    public void saveMessage(UserMessage userMessage) {
+        userMessageRepo.save(userMessage);
     }
 }

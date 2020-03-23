@@ -12,5 +12,10 @@ public interface UserRepo extends JpaRepository<User, Long> {
             "where u.username =:username")
     UserDto findDtoByUsername(String username);
 
+    @Query("select new com.server.domain.dto.UserDto(u) " +
+            "from User u " +
+            "where u.id =:id")
+    UserDto findDtoById(Long id);
+
     User findByUsername(String username);
 }
