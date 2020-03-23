@@ -4,6 +4,7 @@ import com.server.domain.CommMessage;
 import com.server.domain.Community;
 import com.server.domain.User;
 import com.server.domain.UserMessage;
+import com.server.domain.dto.UserDto;
 import com.server.services.CommunityService;
 import com.server.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -78,11 +80,15 @@ public class MainController {
 
     @GetMapping("/users/{username}")
     public String userPage(@PathVariable String username, Model model, @AuthenticationPrincipal User currentUser) {
-        User user = userService.findByUserName(username);
-        model.addAttribute("isCurrentUserPage", currentUser.equals(user));
+        userService.flush();
+        UserDto user = userService.findUserDtoByUsername(username);
+        model.addAttribute("isCurrentUserPage", currentUser.equals(userService.findByUserName(username)));
         model.addAttribute("user", user);
         Set<UserMessage> messages = user.getMessages();
         model.addAttribute("messages", messages);
+        if (!currentUser.equals(userService.findByUserName(username))) {
+            model.addAttribute("isFriend", currentUser.getFriends().contains(userService.findByUserName(username)));
+        }
         return "userpage";
     }
 
@@ -96,6 +102,7 @@ public class MainController {
 
     @PostMapping("/users/{name}")
     public String addMessage(@PathVariable String name, Model model, @AuthenticationPrincipal User currentUser, @RequestParam String text){
+        userService.flush();
         User user = userService.findByUserName(name);
         UserMessage userMessage = new UserMessage();
         LocalDateTime localDateTime = LocalDateTime.now();
@@ -163,6 +170,17 @@ public class MainController {
             user.setUser_avatar(resultFileName);
 
         }
+    }
+
+    @PostMapping("/users/{username}/{action}")
+    public String addOrDelete(@PathVariable String username, @PathVariable String action, @AuthenticationPrincipal User currentUser) {
+        User user = userService.findByUserName(username);
+        if (action.equals("add")) {
+            userService.addFriend(user, currentUser);
+        } else if (action.equals("delete")) {
+            userService.deleteFriend(user, currentUser);
+        }
+        return "redirect:/users/" + username;
     }
 
 }

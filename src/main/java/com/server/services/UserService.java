@@ -2,6 +2,7 @@ package com.server.services;
 
 import com.server.domain.User;
 import com.server.domain.UserMessage;
+import com.server.domain.dto.UserDto;
 import com.server.repos.UserMessageRepo;
 import com.server.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,11 +45,35 @@ public class UserService implements UserDetailsService {
         userRepo.save(user);
     }
 
-    public void setPassword(User user, String password){
+    public void setPassword(User user, String password) {
         user.setPassword(passwordEncoder.encode(password));
     }
 
-    public void save(@NotNull User user){
+    public void save(@NotNull User user) {
         userRepo.save(user);
+    }
+
+    public void addFriend(User user, User currentUser) {
+        user.getFriends().add(currentUser);
+        currentUser.getFriends().add(user);
+        userRepo.save(currentUser);
+        userRepo.save(user);
+        userRepo.flush();
+    }
+
+    public void deleteFriend(User user, User currentUser) {
+        user.getFriends().remove(currentUser);
+        currentUser.getFriends().remove(user);
+        userRepo.saveAndFlush(user);
+        userRepo.saveAndFlush(currentUser);
+        userRepo.flush();
+    }
+
+    public void flush() {
+        userRepo.flush();
+    }
+
+    public UserDto findUserDtoByUsername(String username) {
+        return userRepo.findDtoByUsername(username);
     }
 }

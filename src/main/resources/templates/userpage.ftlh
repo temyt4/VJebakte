@@ -9,8 +9,15 @@
                 </div>
 
                 <#if isCurrentUserPage>
-                        <a class="btn btn-primary " href="/users/${user.getUsername()}/edit">Редактировать</a>
+                    <a class="btn btn-primary " href="/users/${user.getUsername()}/edit">Редактировать</a>
                     <br/>
+                <#else>
+                    <form action="/users/${user.getUsername()}/<#if isFriend>delete<#else>add</#if>" method="post">
+                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                        <button class="btn btn-primary"
+                                type="submit"><#if isFriend>Удалить<#else>Добавить</#if></button>
+                    </form>
+
                 </#if>
             </div>
         </div>
