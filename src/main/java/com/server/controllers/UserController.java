@@ -36,7 +36,9 @@ public class UserController {
     private String uploadPath;
 
     @GetMapping("{username}")
-    public String userPage(@PathVariable String username, Model model, @AuthenticationPrincipal User current) {
+    public String userPage(@PathVariable String username,
+                           Model model,
+                           @AuthenticationPrincipal User current) {
         UserDto currentUser = userService.findUserDtoById(current.getId());
         UserDto user = userService.findUserDtoByUsername(username);
         model.addAttribute("isCurrentUserPage", currentUser.equals(user));
@@ -52,7 +54,10 @@ public class UserController {
     }
 
     @PostMapping("{name}")
-    public String addMessage(@PathVariable String name, @RequestParam String text, @AuthenticationPrincipal User current, Model model) {
+    public String addMessage(@PathVariable String name,
+                             @RequestParam String text,
+                             @AuthenticationPrincipal User current,
+                             Model model) {
         User currentUser = userService.findById(current.getId());
         User user = userService.findByUserName(name);
         UserMessage userMessage = new UserMessage();
@@ -102,7 +107,7 @@ public class UserController {
             userService.setPassword(user, password);
         }
 
-        editAvatar(user, avatar);
+        ControllerUtil.editAvatar(user, avatar, uploadPath);
 
         if (email != null && !email.isEmpty()) {
             user.setEmail(email);
@@ -116,26 +121,12 @@ public class UserController {
         return "redirect:/users/" + user.getUsername();
     }
 
-    private void editAvatar(User user, @RequestParam MultipartFile file) throws IOException {
-        if (file != null && !file.getOriginalFilename().isEmpty()) {
-            File uploadDir = new File(uploadPath);
-
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
-
-            String uuIDFile = UUID.randomUUID().toString();
-            String resultFileName = uuIDFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPath + "/" + resultFileName));
-
-            user.setUser_avatar(resultFileName);
-
-        }
-    }
 
     @PostMapping("{username}/{action}")
-    public String addOrDelete(@PathVariable String username, @PathVariable String action, @AuthenticationPrincipal User current, Model model) {
+    public String addOrDelete(@PathVariable String username,
+                              @PathVariable String action,
+                              @AuthenticationPrincipal User current,
+                              Model model) {
         User currentUser = userService.findById(current.getId());
         User user = userService.findByUserName(username);
         if (action.equals("add")) {

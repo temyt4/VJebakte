@@ -35,7 +35,8 @@ public class MainController {
     }
 
     @GetMapping("/news")
-    public String main(@AuthenticationPrincipal User current, Model model) {
+    public String main(@AuthenticationPrincipal User current,
+                       Model model) {
         User user = userService.findById(current.getId());
         Set<UserMessage> userMessages = new HashSet<>();
         Set<User> friends = user.getFriends();
@@ -54,7 +55,8 @@ public class MainController {
     }
 
     @GetMapping("/friends")
-    public String friends(@AuthenticationPrincipal User current, Model model) {
+    public String friends(@AuthenticationPrincipal User current,
+                          Model model) {
         User user = userService.findById(current.getId());
         Set<User> friends = user.getFriends();
         model.addAttribute("friends", friends);

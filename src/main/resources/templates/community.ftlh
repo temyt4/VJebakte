@@ -60,7 +60,7 @@
             <#if isCommAdmin>
 
                 <div class="card-body">
-                    <a class="btn btn-primary " href="">Редактировать</a>
+                    <a class="btn btn-primary " href="/communities/${comm.getName()}/edit">Редактировать</a>
                 </div>
 
             </#if>

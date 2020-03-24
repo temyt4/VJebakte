@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/communities")
@@ -38,7 +37,8 @@ public class CommunityController {
     private String uploadPath;
 
     @GetMapping("")
-    public String communities(@AuthenticationPrincipal User current, Model model) {
+    public String communities(@AuthenticationPrincipal User current,
+                              Model model) {
         User user = userService.findById(current.getId());
         Set<Community> communities = user.getCommunities();
         model.addAttribute("communities", communities);
@@ -48,7 +48,9 @@ public class CommunityController {
 
 
     @GetMapping("{name}")
-    public String comm(@PathVariable String name, Model umodel, @AuthenticationPrincipal User current) {
+    public String comm(@PathVariable String name,
+                       Model umodel,
+                       @AuthenticationPrincipal User current) {
         User user = userService.findById(current.getId());
         Community community = communityService.findByName(name);
         Set<CommMessage> m = community.getMessages();
@@ -127,6 +129,45 @@ public class CommunityController {
         }
 
 
+        return "redirect:/communities/" + community.getName();
+    }
+
+    @GetMapping("{name}/edit")
+    public String edit(@AuthenticationPrincipal User current,
+                       @PathVariable String name,
+                       Model model) {
+        Community community = communityService.findByName(name);
+        User currentUser = userService.findById(current.getId());
+        if (!community.getAdmins().contains(currentUser)) {
+            return "redirect:/communities/" + community.getName();
+        }
+
+        model.addAttribute("comm", community);
+        model.addAttribute("currentUser", currentUser);
+        return "communityEdit";
+    }
+
+    @PostMapping("{name}/edit")
+    public String postEdit(@AuthenticationPrincipal User current,
+                           @PathVariable String name,
+                           Model model,
+                           @RequestParam String commname,
+                           @RequestParam MultipartFile avatar) throws IOException {
+        Community community = communityService.findByName(name);
+        User currentUser = userService.findById(current.getId());
+
+        if (commname != null && !commname.isEmpty()) {
+            community.setName(commname);
+            Set<CommMessage> messages = community.getMessages();
+            for (CommMessage message : messages) {
+                message.setAuthorName(commname);
+            }
+
+        }
+
+        ControllerUtil.editAvatar(community, avatar, uploadPath);
+
+        model.addAttribute("currentUser", currentUser);
         return "redirect:/communities/" + community.getName();
     }
 }

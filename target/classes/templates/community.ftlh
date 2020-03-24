@@ -6,29 +6,29 @@
 
         <div class="card w-400 my-3">
             <div class="card-body">
-               <h2>${comm.getName()}</h2>
+                <h2>${comm.getName()}</h2>
 
             </div>
         </div>
 
         <#if isCommAdmin>
 
-        <div class="card w-400 my-3">
-            <div class="card-body">
-                <form action="/communities/${comm.getName()}" method="post" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <label for="comment">Новое Сообщение:</label>
-                        <textarea class="form-control" rows="2" id="comment" name="text"></textarea>
+            <div class="card w-400 my-3">
+                <div class="card-body">
+                    <form action="/communities/${comm.getName()}" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="comment">Новое Сообщение:</label>
+                            <textarea class="form-control" rows="2" id="comment" name="text"></textarea>
                             <div class="custom-file col-sm-6">
                                 <input type="file" name="file" id="avatar" placeholder="file"/>
-                                <input type="hidden" name="_csrf" value="${_csrf.token}" />
+                                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                             </div>
-                        <input type="hidden" name="_csrf" value="${_csrf.token}" />
-                    </div>
-                    <button class="btn btn-primary" type="submit">Опубликовать</button>
-                </form>
+                            <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                        </div>
+                        <button class="btn btn-primary" type="submit">Опубликовать</button>
+                    </form>
+                </div>
             </div>
-        </div>
 
         </#if>
 
@@ -60,19 +60,19 @@
             <#if isCommAdmin>
 
                 <div class="card-body">
-                    <a class="btn btn-primary " href="">Редактировать</a>
+                    <a class="btn btn-primary " href="/communities/${comm.getName()}/edit">Редактировать</a>
                 </div>
 
             </#if>
 
             <div class="card-body">
-               <i>Подписчиков: ${subs}</i>
+                <i>Подписчиков: ${subs}</i>
             </div>
 
             <div class="card-body">
                 <form action="/communities/${comm.getName()}/<#if isSub>unsub<#else>sub</#if>" method="post">
                     <button class="btn btn-primary" type="submit"><#if isSub>Отписаться<#else>Подписаться</#if></button>
-                    <input type="hidden" name="_csrf" value="${_csrf.token}" />
+                    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                 </form>
             </div>
         </div>
