@@ -4,6 +4,10 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
 
+/**
+ * created by xev11
+ */
+
 @Entity
 @Table(name = "communities")
 public class Community implements Serializable {

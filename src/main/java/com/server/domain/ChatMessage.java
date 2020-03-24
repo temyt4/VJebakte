@@ -11,26 +11,31 @@ import java.util.Date;
  */
 
 @Entity
-@Table(name = "commessage")
-public class CommMessage implements Serializable, Comparable<CommMessage> {
-
-    private static final long serialVersionUID = 7565783440143452812L;
+@Table(name = "chatmessage")
+public class ChatMessage implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @CreatedDate
+    @Temporal(value = TemporalType.TIMESTAMP)
+    @Column(name = "createddate")
+    private Date createdDate;
+
+
     private String text;
 
     private String filename;
 
-    @CreatedDate
-    @Temporal(value = TemporalType.TIMESTAMP)
-    @Column(name= "createddate")
-    private Date createdDate;
+    @Column(name = "authorid")
+    private Long authorId;
 
-    @Column(name = "authorname")
+    private Long friendId;
+
     private String authorName;
+
+    private String friendName;
 
     public Long getId() {
         return id;
@@ -38,6 +43,14 @@ public class CommMessage implements Serializable, Comparable<CommMessage> {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
     public String getText() {
@@ -56,12 +69,20 @@ public class CommMessage implements Serializable, Comparable<CommMessage> {
         this.filename = filename;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
+    public Long getAuthorId() {
+        return authorId;
     }
 
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
+    }
+
+    public Long getFriendId() {
+        return friendId;
+    }
+
+    public void setFriendId(Long friendId) {
+        this.friendId = friendId;
     }
 
     public String getAuthorName() {
@@ -72,8 +93,11 @@ public class CommMessage implements Serializable, Comparable<CommMessage> {
         this.authorName = authorName;
     }
 
-    @Override
-    public int compareTo(CommMessage o) {
-        return getCreatedDate().compareTo(o.getCreatedDate());
+    public String getFriendName() {
+        return friendName;
+    }
+
+    public void setFriendName(String friendName) {
+        this.friendName = friendName;
     }
 }

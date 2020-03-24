@@ -15,7 +15,7 @@
                                 <a href="/news">Новости</a>
                             </li>
                             <li>
-                                <a href="#">Сообщения</a>
+                                <a href="/users">Сообщения</a>
                             </li>
                             <li>
                                 <a href="/friends">Друзья</a>

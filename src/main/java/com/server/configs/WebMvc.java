@@ -7,6 +7,10 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * created by xev11
+ */
+
 @EnableWebMvc
 @Configuration
 public class WebMvc implements WebMvcConfigurer {

@@ -9,6 +9,10 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * created by xev11
+ */
+
 public class UserDto {
     private Long id;
     private String username;

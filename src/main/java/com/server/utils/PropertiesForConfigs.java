@@ -2,8 +2,12 @@ package com.server.utils;
 
 import java.util.Properties;
 
+/**
+ * created by xev11
+ */
+
 public class PropertiesForConfigs {
-    public static Properties hibernateProperties () {
+    public static Properties hibernateProperties() {
         Properties hibernateProp = new Properties();
         hibernateProp.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
         hibernateProp.put("hibernate.ddl-auto", "update");

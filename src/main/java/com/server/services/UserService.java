@@ -1,9 +1,10 @@
 package com.server.services;
 
-import com.server.domain.Community;
+import com.server.domain.ChatMessage;
 import com.server.domain.User;
 import com.server.domain.UserMessage;
 import com.server.domain.dto.UserDto;
+import com.server.repos.ChatMessageRepo;
 import com.server.repos.UserMessageRepo;
 import com.server.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,10 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * created by xev11
+ */
+
 @Service("userService")
 public class UserService implements UserDetailsService {
 
@@ -23,6 +28,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private UserMessageRepo userMessageRepo;
+
+    @Autowired
+    private ChatMessageRepo chatMessageRepo;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -88,6 +96,12 @@ public class UserService implements UserDetailsService {
 
     public void saveMessage(UserMessage userMessage) {
         userMessageRepo.save(userMessage);
+    }
+
+    public void saveChatMessage(User currentUser, ChatMessage chatMessage) {
+        ChatMessage save = chatMessageRepo.save(chatMessage);
+        currentUser.getChatMessages().add(save);
+        userRepo.save(currentUser);
     }
 
 }

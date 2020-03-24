@@ -1,6 +1,10 @@
 package com.server.domain;
 import org.springframework.security.core.GrantedAuthority;
 
+/**
+ * created by xev11
+ */
+
 public enum Role implements GrantedAuthority {
 
     USER, ADMIN;

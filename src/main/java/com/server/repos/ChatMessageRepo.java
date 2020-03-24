@@ -1,13 +1,11 @@
 package com.server.repos;
 
-import com.server.domain.CommMessage;
+import com.server.domain.ChatMessage;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * created by xev11
  */
 
-public interface CommMessageRepo extends JpaRepository<CommMessage, Long> {
-
-
+public interface ChatMessageRepo extends JpaRepository<ChatMessage, Long> {
 }

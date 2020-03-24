@@ -2,6 +2,7 @@ package com.server.domain;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -9,8 +10,13 @@ import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.*;
 
+/**
+ * created by xev11
+ */
+
 @Entity
 @Table(name = "usr")
+@Transactional
 public class User implements UserDetails, Serializable {
 
     public static final long serialVersionUID = 2854626732095665941L;
@@ -49,6 +55,10 @@ public class User implements UserDetails, Serializable {
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "usrtomes", joinColumns = @JoinColumn(name = "usrid"), inverseJoinColumns = @JoinColumn(name = "msgid"))
     private Set<UserMessage> messages = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "chat", joinColumns = @JoinColumn(name = "usrid"), inverseJoinColumns = @JoinColumn(name = "chatmesid"))
+    private Set<ChatMessage> chatMessages = new HashSet<>();
 
 
     public Long getId() {
@@ -171,5 +181,13 @@ public class User implements UserDetails, Serializable {
 
     public void setMessages(Set<UserMessage> messages) {
         this.messages = messages;
+    }
+
+    public Set<ChatMessage> getChatMessages() {
+        return chatMessages;
+    }
+
+    public void setChatMessages(Set<ChatMessage> chatMessages) {
+        this.chatMessages = chatMessages;
     }
 }

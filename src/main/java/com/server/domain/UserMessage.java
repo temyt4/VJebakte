@@ -7,6 +7,10 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * created by xev11
+ */
+
 @Entity
 @Table(name = "usrmessage")
 @Transactional

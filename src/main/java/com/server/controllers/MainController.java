@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * created by xev11
+ */
+
 @Controller
 public class MainController {
 
@@ -63,7 +67,6 @@ public class MainController {
         model.addAttribute("currentUser", user);
         return "friends";
     }
-
 
 
 }

@@ -7,6 +7,10 @@ import com.server.repos.CommRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * created by xev11
+ */
+
 @Service(value = "communityService")
 public class CommunityService {
 

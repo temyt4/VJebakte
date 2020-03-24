@@ -1,5 +1,6 @@
 package com.server.controllers;
 
+import com.server.domain.ChatMessage;
 import com.server.domain.User;
 import com.server.domain.UserMessage;
 import com.server.domain.dto.UserDto;
@@ -13,14 +14,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+
+/**
+ * created by xev11
+ */
 
 @RequestMapping("/users")
 @Controller
@@ -34,6 +35,17 @@ public class UserController {
 
     @Value("${upload.path}")
     private String uploadPath;
+
+    @GetMapping("")
+    public String users(@AuthenticationPrincipal User current,
+                        Model model) {
+        User user = userService.findById(current.getId());
+        Set<User> friends = user.getFriends();
+        model.addAttribute("friends", friends);
+        model.addAttribute("currentUser", user);
+        return "usersForChat";
+
+    }
 
     @GetMapping("{username}")
     public String userPage(@PathVariable String username,
@@ -138,5 +150,56 @@ public class UserController {
         model.addAttribute("currentUser", currentUser);
         return "redirect:/users/" + username;
     }
+
+    @GetMapping("{name}/chat")
+    public String chat(@PathVariable String name,
+                       @AuthenticationPrincipal User current,
+                       Model model) {
+        User user = userService.findByUserName(name);
+        Long id = user.getId();
+        User currentUser = userService.findById(current.getId());
+
+        if (user.equals(currentUser)) {
+            return "redirect:/users/" + name;
+        }
+
+        List<ChatMessage> messages = ControllerUtil.setToSortedList(currentUser.getChatMessages(), user);
+
+        messages.addAll(ControllerUtil.setToSortedList(user.getChatMessages(), currentUser));
+
+        messages.sort(Comparator.comparing(ChatMessage::getCreatedDate));
+
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("messages", messages);
+
+        return "chat";
+    }
+
+    @PostMapping("{name}/chat")
+    public String editChat(@PathVariable String name,
+                           @AuthenticationPrincipal User current,
+                           Model model,
+                           @RequestParam String text,
+                           @RequestParam MultipartFile file) throws IOException {
+
+        User user = userService.findByUserName(name);
+        User currentUser = userService.findById(current.getId());
+
+        ChatMessage chatMessage = new ChatMessage();
+        chatMessage.setAuthorId(currentUser.getId());
+        chatMessage.setAuthorName(currentUser.getUsername());
+        LocalDateTime localDateTime = LocalDateTime.now();
+        chatMessage.setCreatedDate(Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant()));
+        ControllerUtil.setFile(chatMessage, file, uploadPath);
+        chatMessage.setFriendId(user.getId());
+        chatMessage.setFriendName(user.getUsername());
+        chatMessage.setText(text);
+
+        userService.saveChatMessage(currentUser, chatMessage);
+
+        return "redirect:/users/" + name + "/chat";
+
+    }
+
 
 }

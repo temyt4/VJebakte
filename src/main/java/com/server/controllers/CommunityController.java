@@ -21,6 +21,10 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 
+/**
+ * created by xev11
+ */
+
 @Controller
 @RequestMapping("/communities")
 public class CommunityController {
