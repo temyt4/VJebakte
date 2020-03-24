@@ -3,6 +3,7 @@ package com.server.services;
 import com.server.domain.ChatMessage;
 import com.server.domain.User;
 import com.server.domain.UserMessage;
+import com.server.domain.dto.MessageDto;
 import com.server.domain.dto.UserDto;
 import com.server.repos.ChatMessageRepo;
 import com.server.repos.UserMessageRepo;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 /**
  * created by xev11
@@ -102,6 +104,10 @@ public class UserService implements UserDetailsService {
         ChatMessage save = chatMessageRepo.save(chatMessage);
         currentUser.getChatMessages().add(save);
         userRepo.save(currentUser);
+    }
+
+    public Set<MessageDto> findUserMessageDtoById(Long id) {
+        return userMessageRepo.findDtoByAuthorId(id);
     }
 
 }

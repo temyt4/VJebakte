@@ -1,9 +1,7 @@
 package com.server.controllers;
 
-import com.server.domain.CommMessage;
-import com.server.domain.Community;
 import com.server.domain.User;
-import com.server.domain.UserMessage;
+import com.server.domain.dto.MessageDto;
 import com.server.services.CommunityService;
 import com.server.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -42,20 +40,11 @@ public class MainController {
     public String main(@AuthenticationPrincipal User current,
                        Model model) {
         User user = userService.findById(current.getId());
-        Set<UserMessage> userMessages = new HashSet<>();
-        Set<User> friends = user.getFriends();
-        for (User u : friends) {
-            userMessages.addAll(u.getMessages());
-        }
-        Set<CommMessage> commMessages = new HashSet<>();
-        Set<Community> communities = user.getCommunities();
-        for (Community community : communities) {
-            commMessages.addAll(community.getMessages());
-        }
-        model.addAttribute("commMessage", commMessages);
-        model.addAttribute("userMessage", userMessages);
+        List<MessageDto> messages = ControllerUtil.getAllMessages(user, userService, communityService);
+        model.addAttribute("messages", messages);
         model.addAttribute("currentUser", user);
         return "news";
+
     }
 
     @GetMapping("/friends")

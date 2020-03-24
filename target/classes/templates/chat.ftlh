@@ -20,22 +20,22 @@
             </div>
         </div>
 
-    <div class="card w-500 my-3">
-        <div class="card-body">
-            <form action="" method="post" enctype="multipart/form-data">
-                <div class="form-group">
-                    <textarea class="form-control" rows="1" id="comment" name="text"></textarea>
-                    <br/>
-                    <div class="custom-file col-sm-6">
-                        <input type="file" name="file" id="avatar" placeholder="file"/>
+        <div class="card w-500 my-3">
+            <div class="card-body">
+                <form action="" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <textarea class="form-control" rows="1" id="comment" name="text"></textarea>
+                        <br/>
+                        <div class="custom-file col-sm-6">
+                            <input type="file" name="file" id="avatar" placeholder="file"/>
+                            <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                        </div>
                         <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                     </div>
-                    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-                </div>
-                <button class="btn btn-primary" type="submit">Опубликовать</button>
-            </form>
+                    <button class="btn btn-primary" type="submit">Опубликовать</button>
+                </form>
+            </div>
         </div>
-    </div>
 
     </div>
 

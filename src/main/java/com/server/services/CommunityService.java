@@ -2,10 +2,13 @@ package com.server.services;
 
 import com.server.domain.CommMessage;
 import com.server.domain.Community;
+import com.server.domain.dto.MessageDto;
 import com.server.repos.CommMessageRepo;
 import com.server.repos.CommRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 /**
  * created by xev11
@@ -32,5 +35,9 @@ public class CommunityService {
         CommMessage save = commMessageRepo.save(commMessage);
         community.getMessages().add(save);
         commRepo.save(community);
+    }
+
+    public Set<MessageDto> findMessageDtoByName(String name) {
+        return commMessageRepo.findDtoByAuthorName(name);
     }
 }

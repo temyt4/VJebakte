@@ -20,12 +20,12 @@
                             <li>
                                 <a href="/friends">Друзья</a>
                             </li>
-                                <li>
-                                    <a href="/communities">Группы</a>
-                                </li>
-                                <li>
-                                    <a href="#">Фотографии</a>
-                                </li>
+                            <li>
+                                <a href="/communities">Группы</a>
+                            </li>
+                            <li>
+                                <a href="#">Фотографии</a>
+                            </li>
                             </ol>
                         </div>
                           <#nested>
