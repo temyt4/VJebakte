@@ -174,4 +174,32 @@ public class CommunityController {
         model.addAttribute("currentUser", currentUser);
         return "redirect:/communities/" + community.getName();
     }
+
+    @GetMapping("addNew")
+    public String addNew(@AuthenticationPrincipal User current,
+                         Model model) {
+
+        User currentUser = userService.findById(current.getId());
+        model.addAttribute("currentUser", currentUser);
+
+        return "newCommunity";
+    }
+
+    @PostMapping("addNew")
+    public String newCom(@AuthenticationPrincipal User current,
+                         Model model,
+                         @RequestParam String name,
+                         @RequestParam MultipartFile avatar) throws IOException {
+
+        User currentUser = userService.findById(current.getId());
+        Community community = new Community();
+        ControllerUtil.editAvatar(community, avatar, uploadPath);
+        community.setName(name);
+        community.setAdmins(Collections.singleton(currentUser));
+
+        userService.addNewCommunity(community, currentUser);
+
+        return "redirect:/communities/" + community.getName();
+
+    }
 }

@@ -13,7 +13,7 @@
     </div>
 
     <div class="col-sm-3 col-sm-offset-5 blog-sidebar">
-
+        <a class="btn btn-primary" href="/communities/addNew">Новая группа</a>
     </div>
 
     </div>

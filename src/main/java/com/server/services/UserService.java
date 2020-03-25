@@ -1,11 +1,13 @@
 package com.server.services;
 
 import com.server.domain.ChatMessage;
+import com.server.domain.Community;
 import com.server.domain.User;
 import com.server.domain.UserMessage;
 import com.server.domain.dto.MessageDto;
 import com.server.domain.dto.UserDto;
 import com.server.repos.ChatMessageRepo;
+import com.server.repos.CommRepo;
 import com.server.repos.UserMessageRepo;
 import com.server.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private CommRepo commRepo;
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
@@ -108,6 +113,12 @@ public class UserService implements UserDetailsService {
 
     public Set<MessageDto> findUserMessageDtoById(Long id) {
         return userMessageRepo.findDtoByAuthorId(id);
+    }
+
+    public void addNewCommunity(Community community, User user) {
+        Community save = commRepo.save(community);
+        user.getCommunities().add(save);
+        userRepo.save(user);
     }
 
 }
