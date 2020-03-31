@@ -26,11 +26,11 @@
                             <li>
                                 <a href="/${currentUser.getUsername()}/albums">Фотографии</a>
                             </li>
-                            </ol>
-                        </div>
-                          <#nested>
+                        </ol>
                     </div>
+                    <#nested>
                 </div>
+            </div>
 
 
 
