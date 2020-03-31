@@ -23,6 +23,8 @@ import java.sql.Driver;
  * created by xev11
  */
 /*
+
+
 @Configuration
 @EnableTransactionManagement
 @ComponentScan(basePackages = "com.server")
@@ -82,5 +84,7 @@ public class Config {
 
 
 }
+
+
 */
 

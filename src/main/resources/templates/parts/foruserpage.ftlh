@@ -24,13 +24,13 @@
                                 <a href="/communities">Группы</a>
                             </li>
                             <li>
-                                <a href="#">Фотографии</a>
+                                <a href="/${currentUser.getUsername()}/albums">Фотографии</a>
                             </li>
-                            </ol>
-                        </div>
-                          <#nested>
+                        </ol>
                     </div>
+                    <#nested>
                 </div>
+            </div>
 
 
 

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="clonvkebat@localhost" uuid="036990da-c68a-42a6-8909-dc905bc233e5">
+    <data-source source="LOCAL" name="forhibernatetutorial@localhost" uuid="9d352343-c734-4327-ac69-eaee43dc699b">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/clonvkebat</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost:3306/forhibernatetutorial</jdbc-url>
     </data-source>
   </component>
 </project>

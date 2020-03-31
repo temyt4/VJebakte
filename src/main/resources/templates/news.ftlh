@@ -25,10 +25,10 @@
         </#if>
 
     </div>
-
     <div class="col-sm-3 col-sm-offset-5 blog-sidebar">
 
     </div>
+
     </div>
 
 </@f.page>

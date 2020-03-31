@@ -1,8 +1,6 @@
 package com.server.controllers;
 
-import com.server.domain.ChatMessage;
-import com.server.domain.Community;
-import com.server.domain.User;
+import com.server.domain.*;
 import com.server.domain.dto.MessageDto;
 import com.server.services.CommunityService;
 import com.server.services.UserService;
@@ -57,6 +55,27 @@ public class ControllerUtil {
             file.transferTo(new File(uploadPath + "/" + resultFileName));
 
             community.setAvatar(resultFileName);
+
+        }
+    }
+
+    public static void addPhoto(Album album,
+                                @RequestParam MultipartFile file, String uploadPath, UserService userService, User currentUser) throws IOException {
+        if (file != null && !file.getOriginalFilename().isEmpty()) {
+            File uploadDir = new File(uploadPath);
+
+            if (!uploadDir.exists()) {
+                uploadDir.mkdir();
+            }
+
+            String uuIDFile = UUID.randomUUID().toString();
+            String resultFileName = uuIDFile + "." + file.getOriginalFilename();
+
+            file.transferTo(new File(uploadPath + "/" + resultFileName));
+
+            Photo photo = new Photo(resultFileName);
+            photo.setAlbumId(album.getId());
+            userService.addNewPhoto(photo, album, currentUser);
 
         }
     }

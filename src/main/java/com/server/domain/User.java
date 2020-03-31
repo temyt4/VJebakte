@@ -60,6 +60,9 @@ public class User implements UserDetails, Serializable {
     @JoinTable(name = "chat", joinColumns = @JoinColumn(name = "usrid"), inverseJoinColumns = @JoinColumn(name = "chatmesid"))
     private Set<ChatMessage> chatMessages = new HashSet<>();
 
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "albums", joinColumns = @JoinColumn(name = "usrid"), inverseJoinColumns = @JoinColumn(name = "albumid"))
+    private Set<Album> albums = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -189,5 +192,13 @@ public class User implements UserDetails, Serializable {
 
     public void setChatMessages(Set<ChatMessage> chatMessages) {
         this.chatMessages = chatMessages;
+    }
+
+    public Set<Album> getAlbums() {
+        return albums;
+    }
+
+    public void setAlbums(Set<Album> albums) {
+        this.albums = albums;
     }
 }

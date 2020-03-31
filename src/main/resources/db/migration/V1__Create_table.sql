@@ -56,6 +56,32 @@ create table if not exists comtomes
     mesid bigint not null,
     primary key (comid, mesid)
 ) engine = InnoDB;
+create table if not exists photo
+(
+    id      bigint       not null auto_increment,
+    name    varchar(255) not null,
+    albumid bigint       not null,
+    primary key (id)
+) engine = InnoDB;
+create table if not exists album
+(
+    id     bigint       not null auto_increment,
+    name   varchar(255) not null,
+    userid bigint       not null,
+    primary key (id)
+) engine = InnoDB;
+create table if not exists photos
+(
+    albumid bigint not null,
+    photoid bigint not null,
+    primary key (albumid, photoid)
+) engine = InnoDB;
+create table if not exists albums
+(
+    usrid   bigint not null,
+    albumid bigint not null,
+    primary key (usrid, albumid)
+) engine = InnoDB;
 create table if not exists friends
 (
     usr_id    bigint not null,
@@ -128,3 +154,11 @@ alter table usrtomes
     add constraint FKs5t1jd2dtb2rrqtf0w1tr5k6r foreign key (msgid) references usrmessage (id);
 alter table usrtomes
     add constraint FK3yajj0wgslk4e7f8sj70hdsdm foreign key (usrid) references usr (id);
+alter table albums
+    add constraint aa1 foreign key (usrid) references usr (id);
+alter table albums
+    add constraint aa2 foreign key (albumid) references album (id);
+alter table photos
+    add constraint a1 foreign key (albumid) references album (id);
+alter table photos
+    add constraint a2 foreign key (photoid) references photo (id);

@@ -1,15 +1,9 @@
 package com.server.services;
 
-import com.server.domain.ChatMessage;
-import com.server.domain.Community;
-import com.server.domain.User;
-import com.server.domain.UserMessage;
+import com.server.domain.*;
 import com.server.domain.dto.MessageDto;
 import com.server.domain.dto.UserDto;
-import com.server.repos.ChatMessageRepo;
-import com.server.repos.CommRepo;
-import com.server.repos.UserMessageRepo;
-import com.server.repos.UserRepo;
+import com.server.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -41,6 +36,12 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private CommRepo commRepo;
+
+    @Autowired
+    private AlbumRepo albumRepo;
+
+    @Autowired
+    private PhotoRepo photoRepo;
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
@@ -116,9 +117,44 @@ public class UserService implements UserDetailsService {
     }
 
     public void addNewCommunity(Community community, User user) {
+        if (community.getAvatar() == null) {
+            community.setAvatar("default.jpg");
+        }
         Community save = commRepo.save(community);
         user.getCommunities().add(save);
         userRepo.save(user);
+    }
+
+    public List<User> findAll() {
+        return userRepo.findAll();
+    }
+
+
+    public void addNewAlbum(User currentUser, String albumname) {
+        Album album = new Album();
+        album.setName(albumname);
+        album.setUserid(currentUser.getId());
+        Album save = albumRepo.save(album);
+        currentUser.getAlbums().add(save);
+        userRepo.save(currentUser);
+    }
+
+    public void addNewPhoto(Photo photo, Album album, User currentUser) {
+        Photo save = photoRepo.save(photo);
+        album.getPhotos().add(save);
+        Album save1 = albumRepo.save(album);
+        currentUser.getAlbums().add(save1);
+        userRepo.save(currentUser);
+    }
+
+    public void saveAlbum(Album album, User currentUser) {
+        Album save = albumRepo.save(album);
+        currentUser.getAlbums().add(save);
+        userRepo.save(currentUser);
+    }
+
+    public Album findAlbum(String albumname) {
+        return albumRepo.findByName(albumname);
     }
 
 }
