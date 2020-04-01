@@ -6,6 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * created by xev11
@@ -14,7 +17,9 @@ import java.util.Date;
 @Entity
 @Table(name = "usrmessage")
 @Transactional
-public class UserMessage implements Serializable {
+public class UserMessage implements Message, Serializable {
+
+    private static final long serialVersionUID = 8650170500103969988L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,8 +27,8 @@ public class UserMessage implements Serializable {
 
     @CreatedDate
     @Temporal(value = TemporalType.TIMESTAMP)
-    @Column(name= "createddate")
-    private Date createdDate;
+    @Column(name = "createddate")
+    private Date createdDate = new Date();
 
 
     private String text;
@@ -35,6 +40,12 @@ public class UserMessage implements Serializable {
 
     @Column(name = "authorname")
     private String authorName;
+
+    @OneToMany
+    @JoinTable(name = "comments_user", joinColumns = @JoinColumn(name = "usrmesid"), inverseJoinColumns = @JoinColumn(name = "commentid"))
+    private Set<Comment> comments = new HashSet<>();
+
+    private String uni = "roflan" + getCreatedDate().getTime();
 
     public Long getId() {
         return id;
@@ -82,5 +93,22 @@ public class UserMessage implements Serializable {
 
     public void setAuthorName(String authorName) {
         this.authorName = authorName;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public String getUni() {
+        return uni;
+    }
+
+    @Override
+    public boolean isUser() {
+        return true;
     }
 }

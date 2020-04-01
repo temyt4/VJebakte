@@ -16,11 +16,16 @@ public interface UserMessageRepo extends JpaRepository<UserMessage, Long> {
     Set<UserMessage> findByAuthorId(Long id);
 
     @Query("select new com.server.domain.dto.MessageDto(" +
+            "m.id, " +
             "m.text," +
             "m.filename," +
             "m.authorName," +
             "m.createdDate," +
-            " true) " +
+            " true," +
+            "m.comments," +
+            "m.uni) " +
             "from UserMessage m where m.authorId =:id")
     Set<MessageDto> findDtoByAuthorId(Long id);
+
+    UserMessage findByUni(String uni);
 }

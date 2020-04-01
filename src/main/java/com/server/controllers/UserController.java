@@ -1,6 +1,7 @@
 package com.server.controllers;
 
 import com.server.domain.ChatMessage;
+import com.server.domain.Comment;
 import com.server.domain.User;
 import com.server.domain.UserMessage;
 import com.server.domain.dto.UserDto;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * created by xev11
@@ -57,6 +59,10 @@ public class UserController {
         model.addAttribute("user", user);
         ArrayList<UserMessage> messages = new ArrayList<>(user.getMessages());
         messages.sort((o1, o2) -> o2.getCreatedDate().compareTo(o1.getCreatedDate()));
+        for (UserMessage message : messages) {
+            Set<Comment> comments = message.getComments().stream().sorted(Comparator.comparing(Comment::getCreatedDate)).collect(Collectors.toCollection(LinkedHashSet::new));
+            message.setComments(comments);
+        }
         model.addAttribute("messages", messages);
         if (!currentUser.equals(user)) {
             model.addAttribute("isFriend", currentUser.getFriends().contains(userService.findByUserName(username)));

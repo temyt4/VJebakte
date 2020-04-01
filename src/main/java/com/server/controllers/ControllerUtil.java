@@ -59,6 +59,25 @@ public class ControllerUtil {
         }
     }
 
+    public static void commentPhoto(Comment comment,
+                                    @RequestParam MultipartFile file, String uploadPath) throws IOException {
+        if (file != null && !file.getOriginalFilename().isEmpty()) {
+            File uploadDir = new File(uploadPath);
+
+            if (!uploadDir.exists()) {
+                uploadDir.mkdir();
+            }
+
+            String uuIDFile = UUID.randomUUID().toString();
+            String resultFileName = uuIDFile + "." + file.getOriginalFilename();
+
+            file.transferTo(new File(uploadPath + "/" + resultFileName));
+
+            comment.setFilename(resultFileName);
+
+        }
+    }
+
     public static void addPhoto(Album album,
                                 @RequestParam MultipartFile file, String uploadPath, UserService userService, User currentUser) throws IOException {
         if (file != null && !file.getOriginalFilename().isEmpty()) {

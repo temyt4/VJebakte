@@ -1,19 +1,25 @@
 package com.server.services;
 
+import com.server.controllers.ControllerUtil;
 import com.server.domain.*;
 import com.server.domain.dto.MessageDto;
 import com.server.domain.dto.UserDto;
 import com.server.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.Set;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * created by xev11
@@ -42,6 +48,15 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private PhotoRepo photoRepo;
+
+    @Autowired
+    private CommentRepo commentRepo;
+
+    @Autowired
+    private CommMessageRepo commMessageRepo;
+
+    @Value("${upload.path}")
+    private String uploadPath;
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
@@ -157,4 +172,50 @@ public class UserService implements UserDetailsService {
         return albumRepo.findByName(albumname);
     }
 
+    public void addNewComment(String uni, String text, MultipartFile photo, User currentUser) throws IOException {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Comment comment = new Comment(Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant()),
+                currentUser.getUsername(), currentUser.getId(), text);
+
+        ControllerUtil.commentPhoto(comment, photo, uploadPath);
+        Comment saveComment = commentRepo.save(comment);
+        if (uni.endsWith("community")) {
+            CommMessage message = commMessageRepo.findByUni(uni);
+            message.getComments().add(saveComment);
+            commMessageRepo.save(message);
+        } else {
+            UserMessage message = userMessageRepo.findByUni(uni);
+            message.getComments().add(saveComment);
+            userMessageRepo.save(message);
+        }
+    }
+
+    public List<UserMessage> findUserMessages() {
+        return userMessageRepo.findAll();
+    }
+
+    public List<Message> findMessages(User currentUser) {
+        List<Message> messages = new ArrayList<>();
+        Set<Community> communities = currentUser.getCommunities();
+        for (Community community : communities) {
+            if (community.getCommunity_users().contains(currentUser)) {
+                messages.addAll(community.getMessages());
+            }
+        }
+        Set<User> friends = currentUser.getFriends();
+        for (User friend : friends) {
+            messages.addAll(friend.getMessages());
+        }
+
+        messages.sort((o1, o2) -> o2.getCreatedDate().compareTo(o1.getCreatedDate()));
+
+
+        for (Message message : messages) {
+            Set<Comment> comments = message.getComments().stream().sorted(Comparator.comparing(Comment::getCreatedDate)).collect(Collectors.toCollection(LinkedHashSet::new));
+            message.setComments(comments);
+        }
+
+        return messages;
+
+    }
 }

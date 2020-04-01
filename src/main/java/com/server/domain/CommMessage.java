@@ -5,6 +5,8 @@ import org.springframework.data.annotation.CreatedDate;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * created by xev11
@@ -12,7 +14,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "commessage")
-public class CommMessage implements Serializable, Comparable<CommMessage> {
+public class CommMessage implements Message, Serializable, Comparable<CommMessage> {
 
     private static final long serialVersionUID = 7565783440143452812L;
 
@@ -26,11 +28,21 @@ public class CommMessage implements Serializable, Comparable<CommMessage> {
 
     @CreatedDate
     @Temporal(value = TemporalType.TIMESTAMP)
-    @Column(name= "createddate")
-    private Date createdDate;
+    @Column(name = "createddate")
+    private Date createdDate = new Date();
 
     @Column(name = "authorname")
     private String authorName;
+
+    @OneToMany
+    @JoinTable(name = "comments_comm", joinColumns = @JoinColumn(name = "commmesid"), inverseJoinColumns = @JoinColumn(name = "commentid"))
+    private Set<Comment> comments = new HashSet<>();
+
+    private String uni = "roflan" + getCreatedDate().getTime() + "community";
+
+    public CommMessage() {
+    }
+
 
     public Long getId() {
         return id;
@@ -72,8 +84,25 @@ public class CommMessage implements Serializable, Comparable<CommMessage> {
         this.authorName = authorName;
     }
 
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
+    }
+
     @Override
     public int compareTo(CommMessage o) {
         return getCreatedDate().compareTo(o.getCreatedDate());
+    }
+
+    public String getUni() {
+        return uni;
+    }
+
+    @Override
+    public boolean isUser() {
+        return false;
     }
 }

@@ -63,6 +63,8 @@
                             <p class="card-text">
                                 ${m.getText()}
                             </p>
+                            <br/>
+                            <#include "parts/comments.ftlh"/>
                         </div>
                     </div>
                 </#list>

@@ -1,10 +1,6 @@
 package com.server.controllers;
 
-import com.server.domain.Album;
-import com.server.domain.Photo;
-import com.server.domain.User;
-import com.server.domain.dto.MessageDto;
-import com.server.repos.PhotoRepo;
+import com.server.domain.*;
 import com.server.services.CommunityService;
 import com.server.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +12,9 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.*;
@@ -49,10 +48,10 @@ public class MainController {
     @GetMapping("/news")
     public String main(@AuthenticationPrincipal User current,
                        Model model) {
-        User user = userService.findById(current.getId());
-        List<MessageDto> messages = ControllerUtil.getAllMessages(user, userService, communityService);
+        User currentUser = userService.findById(current.getId());
+        List<Message> messages = userService.findMessages(currentUser);
         model.addAttribute("messages", messages);
-        model.addAttribute("currentUser", user);
+        model.addAttribute("currentUser", currentUser);
         return "news";
 
     }
@@ -186,5 +185,23 @@ public class MainController {
         ControllerUtil.addPhoto(album, photo, uploadPath, userService, currentUser);
         return "redirect:/" + name + "/albums/" + album.getName();
     }
+
+
+    @PostMapping("/{uni}/addComment")
+    public String addComment(@PathVariable String uni,
+                             @AuthenticationPrincipal User current,
+                             @RequestParam String text,
+                             @RequestParam MultipartFile photo,
+                             RedirectAttributes redirectAttributes,
+                             @RequestHeader(required = false) String referer) throws IOException {
+        User currentUser = userService.findById(current.getId());
+        userService.addNewComment(uni, text, photo, currentUser);
+        UriComponents components = UriComponentsBuilder.fromHttpUrl(referer).build();
+
+        components.getQueryParams()
+                .forEach(redirectAttributes::addAttribute);
+        return "redirect:" + components.getPath();
+    }
+
 
 }

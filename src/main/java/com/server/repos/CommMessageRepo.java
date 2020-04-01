@@ -14,12 +14,16 @@ import java.util.Set;
 public interface CommMessageRepo extends JpaRepository<CommMessage, Long> {
 
     @Query("select new com.server.domain.dto.MessageDto(" +
+            "m.id, " +
             "m.text," +
             "m.filename," +
             "m.authorName," +
             "m.createdDate," +
-            " false) " +
+            " false," +
+            "m.uni) " +
             "from CommMessage m where m.authorName =:name")
     Set<MessageDto> findDtoByAuthorName(String name);
+
+    CommMessage findByUni(String uni);
 
 }

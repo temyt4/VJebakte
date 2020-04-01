@@ -43,8 +43,11 @@
                         <i>${m.getCreatedDate()}</i>
                         <br>
                         <br/>
-                        <img src="/img/${m.getFilename()}" height="450" width="400"/>
-                        <br>
+                        <#if m.getFilename()??>
+                             <img src="/img/${m.getFilename()}" height="450" width="400"/>
+                        </#if>
+                        <br/>
+                        <#include "parts/comments.ftlh"/>
                     </div>
                 </div>
             </#list>

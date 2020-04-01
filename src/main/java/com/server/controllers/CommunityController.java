@@ -1,6 +1,7 @@
 package com.server.controllers;
 
 import com.server.domain.CommMessage;
+import com.server.domain.Comment;
 import com.server.domain.Community;
 import com.server.domain.User;
 import com.server.services.CommunityService;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * created by xev11
@@ -59,6 +61,10 @@ public class CommunityController {
         Community community = communityService.findByName(name);
         Set<CommMessage> m = community.getMessages();
         ArrayList<CommMessage> messages = new ArrayList<>(m);
+        for (CommMessage message : messages) {
+            Set<Comment> comments = message.getComments().stream().sorted(Comparator.comparing(Comment::getCreatedDate)).collect(Collectors.toCollection(LinkedHashSet::new));
+            message.setComments(comments);
+        }
         messages.sort((o1, o2) -> o2.getCreatedDate().compareTo(o1.getCreatedDate()));
         umodel.addAttribute("isSub", community.getCommunity_users().contains(user));
         umodel.addAttribute("subs", String.valueOf(community.getCommunity_users().size()));

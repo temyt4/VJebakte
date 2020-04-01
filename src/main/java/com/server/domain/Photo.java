@@ -3,10 +3,11 @@ package com.server.domain;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "photo")
-public class Photo {
+public class Photo implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
