@@ -18,12 +18,12 @@ create table if not exists chatmessage
 ) engine = InnoDB;
 create table if not exists commessage
 (
-    id          bigint not null auto_increment,
+    id          bigint       not null auto_increment,
     authorname  varchar(255),
     createddate datetime,
     filename    varchar(255),
     text        varchar(255),
-    uni varchar(512) not null,
+    uni         varchar(512) not null,
     primary key (id)
 ) engine = InnoDB;
 create table if not exists communities
@@ -106,13 +106,13 @@ create table if not exists usr
 ) engine = InnoDB;
 create table if not exists usrmessage
 (
-    id          bigint not null auto_increment,
+    id          bigint       not null auto_increment,
     authorid    bigint,
     authorname  varchar(255),
     createddate datetime,
     filename    varchar(255),
     text        varchar(255),
-    uni varchar(512) not null,
+    uni         varchar(512) not null,
     primary key (id)
 ) engine = InnoDB;
 create table if not exists usrtomes
@@ -124,33 +124,37 @@ create table if not exists usrtomes
     engine = InnoDB;
 create table if not exists comment
 (
-    id bigint not null auto_increment,
+    id          bigint        not null auto_increment,
     createddate datetime,
-    text varchar(2048) not null,
-    authorname varchar(255) not null,
-    authorid bigint not null,
-    filename varchar(255),
+    text        varchar(2048) not null,
+    authorname  varchar(255)  not null,
+    authorid    bigint        not null,
+    filename    varchar(255),
     primary key (id)
 ) engine = InnoDB;
 
 create table if not exists comments_comm
 (
     commmesid bigint not null,
-    commentid bigint not null ,
+    commentid bigint not null,
     primary key (commentid, commmesid)
 ) engine = InnoDB;
 create table if not exists comments_user
 (
-    usrmesid bigint not null,
-    commentid bigint not null ,
+    usrmesid  bigint not null,
+    commentid bigint not null,
     primary key (commentid, usrmesid)
 ) engine = InnoDB;
 
-alter table comments_user add constraint cc1 foreign key (usrmesid) references usrmessage(id);
-alter table comments_user add constraint cc2 foreign key (commentid) references comment(id);
+alter table comments_user
+    add constraint cc1 foreign key (usrmesid) references usrmessage (id);
+alter table comments_user
+    add constraint cc2 foreign key (commentid) references comment (id);
 
-alter table comments_comm add constraint c1 foreign key (commmesid) references commessage(id);
-alter table comments_comm add constraint c2 foreign key (commentid) references comment(id);
+alter table comments_comm
+    add constraint c1 foreign key (commmesid) references commessage (id);
+alter table comments_comm
+    add constraint c2 foreign key (commentid) references comment (id);
 alter table comtomes
     add constraint UK_tqo4ph0eurpytk88q677has1p unique (mesid);
 alter table usrtomes

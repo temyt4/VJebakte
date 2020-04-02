@@ -1,4 +1,5 @@
-<a class="btn btn-primary" data-toggle="collapse" href="#${m.getUni()}" role="button" aria-expanded="false" aria-controls="${m.getUni()}">
+<a class="btn btn-primary" data-toggle="collapse" href="#${m.getUni()}" role="button" aria-expanded="false"
+   aria-controls="${m.getUni()}">
     Show Comments
 </a>
 
@@ -21,11 +22,11 @@
             <br/>
             <form method="post" action="/${m.getUni()}/addComment" enctype="multipart/form-data">
                 <input type="text" class="form-control" id="text" placeholder="text" name="text"/>
-                <input type="hidden" name="_csrf" value="${_csrf.token}" />
+                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                 <br/>
                 <div class="custom-file col-sm-6">
                     <input type="file" name="photo" id="photo" placeholder="photo"/>
-                    <input type="hidden" name="_csrf" value="${_csrf.token}" />
+                    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-primary" type="submit">Сохранить</button>
