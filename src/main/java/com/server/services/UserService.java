@@ -218,4 +218,41 @@ public class UserService implements UserDetailsService {
         return messages;
 
     }
+
+    public void likeMessage(String uni, User currentUser, String where) {
+        if (where.equals("touser")) {
+            UserMessage message = userMessageRepo.findByUni(uni);
+            message.getLikes().add(currentUser);
+            userMessageRepo.save(message);
+        } else if (where.equals("tomessage")) {
+            CommMessage message = commMessageRepo.findByUni(uni);
+            message.getLikes().add(currentUser);
+            commMessageRepo.save(message);
+        }
+    }
+
+    public void unLikeMessage(String uni, User currentUser, String where) {
+        if (where.equals("touser")) {
+            UserMessage message = userMessageRepo.findByUni(uni);
+            message.getLikes().remove(currentUser);
+            userMessageRepo.save(message);
+        } else if (where.equals("tomessage")) {
+            CommMessage message = commMessageRepo.findByUni(uni);
+            message.getLikes().remove(currentUser);
+            commMessageRepo.save(message);
+        }
+    }
+
+    public void addLikeToComment(Long id, User currentUser) {
+        Comment comment = commentRepo.findById(id).get();
+        comment.getLikes().add(currentUser);
+        commentRepo.save(comment);
+
+    }
+
+    public void unLikeComment(Long id, User currentUser) {
+        Comment comment = commentRepo.findById(id).get();
+        comment.getLikes().remove(currentUser);
+        commentRepo.save(comment);
+    }
 }

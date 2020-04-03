@@ -60,11 +60,13 @@ public class CommunityController {
         User user = userService.findById(current.getId());
         Community community = communityService.findByName(name);
         Set<CommMessage> m = community.getMessages();
+
         ArrayList<CommMessage> messages = new ArrayList<>(m);
         for (CommMessage message : messages) {
             Set<Comment> comments = message.getComments().stream().sorted(Comparator.comparing(Comment::getCreatedDate)).collect(Collectors.toCollection(LinkedHashSet::new));
             message.setComments(comments);
         }
+
         messages.sort((o1, o2) -> o2.getCreatedDate().compareTo(o1.getCreatedDate()));
         umodel.addAttribute("isSub", community.getCommunity_users().contains(user));
         umodel.addAttribute("subs", String.valueOf(community.getCommunity_users().size()));

@@ -40,6 +40,12 @@ public class CommMessage implements Message, Serializable, Comparable<CommMessag
 
     private String uni = "roflan" + getCreatedDate().getTime() + "community";
 
+    @ManyToMany
+    @JoinTable(name = "commessage_likes",
+            joinColumns = @JoinColumn(name = "commessage_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> likes = new HashSet<>();
+
     public CommMessage() {
     }
 
@@ -104,5 +110,22 @@ public class CommMessage implements Message, Serializable, Comparable<CommMessag
     @Override
     public boolean isUser() {
         return false;
+    }
+
+    public void setUni(String uni) {
+        this.uni = uni;
+    }
+
+    public Set<User> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Set<User> likes) {
+        this.likes = likes;
+    }
+
+    @Override
+    public boolean meLiked(User user) {
+        return likes.contains(user);
     }
 }

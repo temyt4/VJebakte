@@ -146,6 +146,36 @@ create table if not exists comments_user
     primary key (commentid, usrmesid)
 ) engine = InnoDB;
 
+create table if not exists usermessage_likes
+(
+    usermessage_id bigint not null ,
+    user_id bigint not null,
+    primary key (usermessage_id, user_id)
+) engine = InnoDB;
+
+create table if not exists commessage_likes
+(
+    commessage_id bigint not null ,
+    user_id bigint not null,
+    primary key (commessage_id, user_id)
+) engine = InnoDB;
+
+create table if not exists comment_like
+(
+    comment_id bigint not null ,
+    user_id bigint not null,
+    primary key (comment_id, user_id)
+) engine = InnoDB;
+
+alter table comment_like add constraint ccml1 foreign key (comment_id) references comment(id);
+alter table comment_like add constraint ccml2 foreign key (user_id) references usr(id);
+
+alter table usermessage_likes add constraint usml1 foreign key (usermessage_id) references usrmessage(id);
+alter table usermessage_likes add constraint usml2 foreign key (user_id) references usr(id);
+
+alter table commessage_likes add constraint cml1 foreign key (commessage_id) references commessage(id);
+alter table commessage_likes add constraint cml2 foreign key (user_id) references usr(id);
+
 alter table comments_user
     add constraint cc1 foreign key (usrmesid) references usrmessage (id);
 alter table comments_user

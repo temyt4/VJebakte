@@ -21,6 +21,15 @@
                         <br>
                         <br/>
 
+                        <a class="col align-self-right"
+                           href="/<#if m.isUser()>touser<#else>tomessage</#if>/${m.getUni()}/<#if m.meLiked(currentUser)>unLike<#else>like</#if>">
+                            <#if m.meLiked(currentUser)>
+                                <i class="fas fa-heart"> ${m.getLikes()?size}</i>
+                            <#else>
+                                <i class="far fa-heart"> ${m.getLikes()?size}</i>
+                            </#if>
+                        </a>
+
                         <#include "parts/comments.ftlh"/>
 
                     </div>

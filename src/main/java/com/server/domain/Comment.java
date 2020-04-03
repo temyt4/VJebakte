@@ -5,6 +5,8 @@ import org.springframework.data.annotation.CreatedDate;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "comment")
@@ -23,6 +25,12 @@ public class Comment implements Serializable {
     private Long authorid;
     private String text;
     private String filename;
+
+    @ManyToMany
+    @JoinTable(name = "comment_like",
+            joinColumns = @JoinColumn(name = "comment_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> likes = new HashSet<>();
 
     public Comment() {
 
@@ -81,5 +89,17 @@ public class Comment implements Serializable {
 
     public void setFilename(String filename) {
         this.filename = filename;
+    }
+
+    public Set<User> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Set<User> likes) {
+        this.likes = likes;
+    }
+
+    public boolean meLiked(User user) {
+        return likes.contains(user);
     }
 }

@@ -22,4 +22,8 @@ public interface Message {
     boolean isUser();
 
     void setComments(Set<Comment> comments);
+
+    Set<User> getLikes();
+
+    boolean meLiked(User user);
 }

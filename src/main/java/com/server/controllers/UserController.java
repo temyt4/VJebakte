@@ -53,8 +53,8 @@ public class UserController {
     public String userPage(@PathVariable String username,
                            Model model,
                            @AuthenticationPrincipal User current) {
-        UserDto currentUser = userService.findUserDtoById(current.getId());
-        UserDto user = userService.findUserDtoByUsername(username);
+        User currentUser = userService.findById(current.getId());
+        User user = userService.findByUserName(username);
         model.addAttribute("isCurrentUserPage", currentUser.equals(user));
         model.addAttribute("user", user);
         ArrayList<UserMessage> messages = new ArrayList<>(user.getMessages());
@@ -65,7 +65,7 @@ public class UserController {
         }
         model.addAttribute("messages", messages);
         if (!currentUser.equals(user)) {
-            model.addAttribute("isFriend", currentUser.getFriends().contains(userService.findByUserName(username)));
+            model.addAttribute("isFriend", currentUser.getFriends().contains(user));
         }
         model.addAttribute("currentUser", currentUser);
         return "userpage";

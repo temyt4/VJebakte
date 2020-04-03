@@ -7,7 +7,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -46,6 +45,12 @@ public class UserMessage implements Message, Serializable {
     private Set<Comment> comments = new HashSet<>();
 
     private String uni = "roflan" + getCreatedDate().getTime();
+
+    @ManyToMany
+    @JoinTable(name = "usermessage_likes",
+            joinColumns = @JoinColumn(name = "usermessage_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> likes = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -111,4 +116,25 @@ public class UserMessage implements Message, Serializable {
     public boolean isUser() {
         return true;
     }
+
+    public void setUni(String uni) {
+        this.uni = uni;
+    }
+
+    @Override
+    public Set<User> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Set<User> likes) {
+        this.likes = likes;
+    }
+
+
+    @Override
+    public boolean meLiked(User user) {
+        return likes.contains(user);
+    }
+
+
 }

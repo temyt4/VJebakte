@@ -15,6 +15,13 @@
                         <#if c.getFilename()??>
                             <img src="/img/${c.getFilename()}" width="60" height="60"/>
                         </#if>
+                        <a class="col align-self-right" href="/<#if c.meLiked(currentUser)>unLike<#else>like</#if>/${c.getId()}/toComment">
+                            <#if c.meLiked(currentUser)>
+                                <i class="fas fa-heart"> ${c.getLikes()?size}</i>
+                            <#else>
+                                <i class="far fa-heart"> ${c.getLikes()?size}</i>
+                            </#if>
+                        </a>
                     </li>
                     </ul>
                 </#list>

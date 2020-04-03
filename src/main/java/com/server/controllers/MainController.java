@@ -52,6 +52,7 @@ public class MainController {
         List<Message> messages = userService.findMessages(currentUser);
         model.addAttribute("messages", messages);
         model.addAttribute("currentUser", currentUser);
+
         return "news";
 
     }
@@ -200,6 +201,48 @@ public class MainController {
 
         components.getQueryParams()
                 .forEach(redirectAttributes::addAttribute);
+        return "redirect:" + components.getPath();
+    }
+
+    @GetMapping("/{where}/{uni}/{action}")
+    public String doAction(@PathVariable String uni,
+                           @PathVariable String where,
+                           @PathVariable String action,
+                           RedirectAttributes redirectAttributes,
+                           @RequestHeader(required = false) String referer,
+                           @AuthenticationPrincipal User current) {
+
+        User currentUser = userService.findById(current.getId());
+        if (action.equals("like")) {
+            userService.likeMessage(uni, currentUser, where);
+        } else if (action.equals("unLike")) {
+            userService.unLikeMessage(uni, currentUser, where);
+        }
+        UriComponents components = UriComponentsBuilder.fromHttpUrl(referer).build();
+
+        components.getQueryParams()
+                .forEach(redirectAttributes::addAttribute);
+
+        return "redirect:" + components.getPath();
+    }
+
+    @GetMapping("/{action}/{id}/toComment")
+    public String doAcToCom(@PathVariable String action,
+                            @PathVariable Long id,
+                            @AuthenticationPrincipal User current,
+                            RedirectAttributes redirectAttributes,
+                            @RequestHeader(required = false) String referer) {
+        User currentUser = userService.findById(current.getId());
+        if (action.equals("like")) {
+            userService.addLikeToComment(id, currentUser);
+        } else if (action.equals("unLike")) {
+            userService.unLikeComment(id, currentUser);
+        }
+        UriComponents components = UriComponentsBuilder.fromHttpUrl(referer).build();
+
+        components.getQueryParams()
+                .forEach(redirectAttributes::addAttribute);
+
         return "redirect:" + components.getPath();
     }
 
