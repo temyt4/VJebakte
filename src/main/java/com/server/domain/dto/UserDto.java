@@ -14,15 +14,15 @@ import java.util.Set;
  */
 
 public class UserDto {
-    private Long id;
+    private String id;
     private String username;
     private String password;
     private Date birthdate;
     private String user_avatar;
     private String email;
     private Set<Role> roles;
-    private Set<User> friends;
-    private Set<Community> communities;
+    private Set<String> friends;
+    private Set<String> communities;
     private Set<UserMessage> messages;
 
     public UserDto(User u) {
@@ -42,11 +42,11 @@ public class UserDto {
 
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -98,19 +98,19 @@ public class UserDto {
         this.roles = roles;
     }
 
-    public Set<User> getFriends() {
+    public Set<String> getFriends() {
         return friends;
     }
 
-    public void setFriends(Set<User> friends) {
+    public void setFriends(Set<String> friends) {
         this.friends = friends;
     }
 
-    public Set<Community> getCommunities() {
+    public Set<String> getCommunities() {
         return communities;
     }
 
-    public void setCommunities(Set<Community> communities) {
+    public void setCommunities(Set<String> communities) {
         this.communities = communities;
     }
 

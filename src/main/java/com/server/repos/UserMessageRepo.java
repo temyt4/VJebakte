@@ -1,9 +1,9 @@
 package com.server.repos;
 
 import com.server.domain.UserMessage;
-import com.server.domain.dto.MessageDto;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.Set;
 
@@ -11,21 +11,10 @@ import java.util.Set;
  * created by xev11
  */
 
-public interface UserMessageRepo extends JpaRepository<UserMessage, Long> {
+public interface UserMessageRepo extends ReactiveMongoRepository<UserMessage, String> {
 
-    Set<UserMessage> findByAuthorId(Long id);
+    Flux<UserMessage> findByAuthorId(String id);
 
-    @Query("select new com.server.domain.dto.MessageDto(" +
-            "m.id, " +
-            "m.text," +
-            "m.filename," +
-            "m.authorName," +
-            "m.createdDate," +
-            " true," +
-            "m.comments," +
-            "m.uni) " +
-            "from UserMessage m where m.authorId =:id")
-    Set<MessageDto> findDtoByAuthorId(Long id);
 
-    UserMessage findByUni(String uni);
+    Mono<UserMessage> findByUni(String uni);
 }

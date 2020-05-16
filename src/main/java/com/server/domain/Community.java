@@ -1,6 +1,9 @@
 package com.server.domain;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.io.Serializable;
 import java.util.*;
 
@@ -8,38 +11,30 @@ import java.util.*;
  * created by xev11
  */
 
-@Entity
-@Table(name = "communities")
+@Document
+@Transactional
 public class Community implements Serializable {
 
     private static final long serialVersionUID = 7960083376527756290l;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     private String name;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "community_users", joinColumns = @JoinColumn(name = "comm_id"), inverseJoinColumns = @JoinColumn(name = "usr_id"))
-    private Set<User> community_users = new HashSet<>();
+    private Set<String> community_users = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "community_admins", joinColumns = @JoinColumn(name = "comm_id"), inverseJoinColumns = @JoinColumn(name = "usr_id"))
-    private Set<User> admins = new HashSet<>();
+    private Set<String> admins = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "comtomes", joinColumns = @JoinColumn(name = "comid"), inverseJoinColumns = @JoinColumn(name = "mesid"))
     private Set<CommMessage> messages = new HashSet<>();
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    @Column(name = "avatar")
     private String avatar;
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -51,11 +46,11 @@ public class Community implements Serializable {
         this.name = name;
     }
 
-    public Set<User> getCommunity_users() {
+    public Set<String> getCommunity_users() {
         return community_users;
     }
 
-    public void setCommunity_users(Set<User> community_users) {
+    public void setCommunity_users(Set<String> community_users) {
         this.community_users = community_users;
     }
 
@@ -75,11 +70,11 @@ public class Community implements Serializable {
         this.avatar = avatar;
     }
 
-    public Set<User> getAdmins() {
+    public Set<String> getAdmins() {
         return admins;
     }
 
-    public void setAdmins(Set<User> admins) {
+    public void setAdmins(Set<String> admins) {
         this.admins = admins;
     }
 

@@ -1,8 +1,9 @@
 package com.server.domain;
 
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -10,17 +11,13 @@ import java.util.Date;
  * created by xev11
  */
 
-@Entity
-@Table(name = "chatmessage")
+@Document
 public class ChatMessage implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @CreatedDate
-    @Temporal(value = TemporalType.TIMESTAMP)
-    @Column(name = "createddate")
     private Date createdDate;
 
 
@@ -28,20 +25,19 @@ public class ChatMessage implements Serializable {
 
     private String filename;
 
-    @Column(name = "authorid")
-    private Long authorId;
+    private String authorId;
 
-    private Long friendId;
+    private String friendId;
 
     private String authorName;
 
     private String friendName;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -69,19 +65,19 @@ public class ChatMessage implements Serializable {
         this.filename = filename;
     }
 
-    public Long getAuthorId() {
+    public String getAuthorId() {
         return authorId;
     }
 
-    public void setAuthorId(Long authorId) {
+    public void setAuthorId(String authorId) {
         this.authorId = authorId;
     }
 
-    public Long getFriendId() {
+    public String getFriendId() {
         return friendId;
     }
 
-    public void setFriendId(Long friendId) {
+    public void setFriendId(String friendId) {
         this.friendId = friendId;
     }
 
@@ -99,5 +95,9 @@ public class ChatMessage implements Serializable {
 
     public void setFriendName(String friendName) {
         this.friendName = friendName;
+    }
+
+    public String getStringTime(){
+        return getCreatedDate().toString();
     }
 }

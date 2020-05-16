@@ -5,11 +5,13 @@ import java.util.Set;
 
 public interface Message {
 
-    Long getId();
+    String getId();
 
     String getText();
 
     String getFilename();
+
+    String getStringTime();
 
     Date getCreatedDate();
 

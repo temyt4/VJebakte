@@ -1,9 +1,10 @@
 package com.server.domain;
 
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -13,20 +14,16 @@ import java.util.Set;
  * created by xev11
  */
 
-@Entity
-@Table(name = "usrmessage")
+@Document
 @Transactional
 public class UserMessage implements Message, Serializable {
 
     private static final long serialVersionUID = 8650170500103969988L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @CreatedDate
-    @Temporal(value = TemporalType.TIMESTAMP)
-    @Column(name = "createddate")
     private Date createdDate = new Date();
 
 
@@ -34,29 +31,25 @@ public class UserMessage implements Message, Serializable {
 
     private String filename;
 
-    @Column(name = "authorid")
-    private Long authorId;
 
-    @Column(name = "authorname")
+    private String authorId;
+
+
     private String authorName;
 
-    @OneToMany
-    @JoinTable(name = "comments_user", joinColumns = @JoinColumn(name = "usrmesid"), inverseJoinColumns = @JoinColumn(name = "commentid"))
+    @DBRef
     private Set<Comment> comments = new HashSet<>();
 
-    private String uni = "roflan" + getCreatedDate().getTime();
+    private String uni = "roflan" + getCreatedDate().getTime()+"user";
 
-    @ManyToMany
-    @JoinTable(name = "usermessage_likes",
-            joinColumns = @JoinColumn(name = "usermessage_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @DBRef
     private Set<User> likes = new HashSet<>();
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -84,11 +77,11 @@ public class UserMessage implements Message, Serializable {
         this.filename = filename;
     }
 
-    public Long getAuthorId() {
+    public String getAuthorId() {
         return authorId;
     }
 
-    public void setAuthorId(Long authorId) {
+    public void setAuthorId(String authorId) {
         this.authorId = authorId;
     }
 
@@ -137,4 +130,8 @@ public class UserMessage implements Message, Serializable {
     }
 
 
+    @Override
+    public String getStringTime() {
+        return getCreatedDate().toString();
+    }
 }

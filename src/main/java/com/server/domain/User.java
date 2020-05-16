@@ -1,12 +1,11 @@
 package com.server.domain;
 
+import lombok.ToString;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.*;
 
@@ -14,61 +13,56 @@ import java.util.*;
  * created by xev11
  */
 
-@Entity
-@Table(name = "usr")
-@Transactional
+@Document
 public class User implements UserDetails, Serializable {
 
     public static final long serialVersionUID = 2854626732095665941L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @NotBlank(message = "select username")
     private String username;
 
-    @NotBlank(message = "select password")
     private String password;
 
     private Date birthdate;
 
     private String user_avatar;
 
-    @Email
     private String email;
 
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
-    @Enumerated(EnumType.STRING)
+    public User() {}
+
+    public User(String id, String username, String password, Set<Role> roles) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
+    }
+
+
     private Set<Role> roles;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "friends", joinColumns = @JoinColumn(name = "usr_id"), inverseJoinColumns = @JoinColumn(name = "friend_id"))
-    private Set<User> friends = new HashSet<>();
+
+    private Set<String> friends = new HashSet<>();
 
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "community_subers", joinColumns = @JoinColumn(name = "usr_id"), inverseJoinColumns = @JoinColumn(name = "comm_id"))
-    private Set<Community> communities = new HashSet<>();
+    private Set<String> communities = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "usrtomes", joinColumns = @JoinColumn(name = "usrid"), inverseJoinColumns = @JoinColumn(name = "msgid"))
+
     private Set<UserMessage> messages = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(name = "chat", joinColumns = @JoinColumn(name = "usrid"), inverseJoinColumns = @JoinColumn(name = "chatmesid"))
+
+
     private Set<ChatMessage> chatMessages = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "albums", joinColumns = @JoinColumn(name = "usrid"), inverseJoinColumns = @JoinColumn(name = "albumid"))
     private Set<Album> albums = new HashSet<>();
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -149,19 +143,19 @@ public class User implements UserDetails, Serializable {
         this.roles = roles;
     }
 
-    public Set<Community> getCommunities() {
+    public Set<String> getCommunities() {
         return communities;
     }
 
-    public void setCommunities(Set<Community> communities) {
+    public void setCommunities(Set<String> communities) {
         this.communities = communities;
     }
 
-    public Set<User> getFriends() {
+    public Set<String> getFriends() {
         return friends;
     }
 
-    public void setFriends(Set<User> friends) {
+    public void setFriends(Set<String> friends) {
         this.friends = friends;
     }
 

@@ -1,26 +1,27 @@
 package com.server.domain;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "album")
+@Document
 public class Album implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     private String name;
 
-    @OneToMany
-    @JoinTable(name = "photos", joinColumns = @JoinColumn(name = "albumid"), inverseJoinColumns = @JoinColumn(name = "photoid"))
+    @DBRef
     private Set<Photo> photos = new HashSet<>();
 
-    private Long userid;
+    private String userid;
 
     public Long getId() {
         return id;
@@ -46,11 +47,11 @@ public class Album implements Serializable {
         this.photos = photos;
     }
 
-    public Long getUserid() {
+    public String getUserid() {
         return userid;
     }
 
-    public void setUserid(Long userid) {
+    public void setUserid(String userid) {
         this.userid = userid;
     }
 

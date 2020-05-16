@@ -1,53 +1,46 @@
 package com.server.domain;
 
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "comment")
+@Document
 public class Comment implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @CreatedDate
-    @Temporal(value = TemporalType.TIMESTAMP)
-    @Column(name = "createddate")
     private Date createdDate;
 
     private String authorname;
-    private Long authorid;
+    private String authorid;
     private String text;
     private String filename;
 
-    @ManyToMany
-    @JoinTable(name = "comment_like",
-            joinColumns = @JoinColumn(name = "comment_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<User> likes = new HashSet<>();
+    private Set<String> likes = new HashSet<>();
 
     public Comment() {
 
     }
 
-    public Comment(Date createdDate, String authorname, Long authorid, String text) {
+    public Comment(Date createdDate, String authorname, String authorid, String text) {
         this.createdDate = createdDate;
         this.authorname = authorname;
         this.authorid = authorid;
         this.text = text;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -67,11 +60,11 @@ public class Comment implements Serializable {
         this.authorname = authorname;
     }
 
-    public Long getAuthorid() {
+    public String getAuthorid() {
         return authorid;
     }
 
-    public void setAuthorid(Long authorid) {
+    public void setAuthorid(String authorid) {
         this.authorid = authorid;
     }
 
@@ -91,15 +84,19 @@ public class Comment implements Serializable {
         this.filename = filename;
     }
 
-    public Set<User> getLikes() {
+    public Set<String> getLikes() {
         return likes;
     }
 
-    public void setLikes(Set<User> likes) {
+    public void setLikes(Set<String> likes) {
         this.likes = likes;
     }
 
     public boolean meLiked(User user) {
         return likes.contains(user);
+    }
+
+    public String getStringTime(){
+        return getCreatedDate().toString();
     }
 }
